@@ -1,13 +1,128 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+model User {
+  id              String          @id @default(uuid())
+  email           String          @unique
+  nom             String
+  motDePasse      String          @map("mot_de_passe")
+  role            Role            @default(MEMBER)
+  avatar          String?
+  dateInscription DateTime        @default(now()) @map("date_inscription")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+
+  projetsCrees    Project[]       @relation("CreatedBy")
+  tachesAssignees Task[]          @relation("AssignedTo")
+  commentaires    Comment[]
+  notifications   Notification[]
+  memberships     ProjectMember[]
+
+  @@map("users")
+}
+
+model Project {
+  id          String          @id @default(uuid())
+  titre       String
+  description String?
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+
+  createurId  String          @map("createur_id")
+  createur    User            @relation("CreatedBy", fields: [createurId], references: [id], onDelete: Cascade)
+  taches      Task[]
+  membres     ProjectMember[]
+
+  @@map("projects")
+}
+
+model ProjectMember {
+  id        String   @id @default(uuid())
+  joinedAt  DateTime @default(now()) @map("joined_at")
+
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId String   @map("project_id")
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, projectId])
+  @@map("project_members")
+}
+
+model Task {
+  id           String      @id @default(uuid())
+  titre        String
+  description  String?
+  statut       TaskStatus  @default(TODO)
+  echeance     DateTime?   @map("echeance")
+  ordre        Int         @default(0)
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+
+  projetId     String      @map("projet_id")
+  projet       Project     @relation(fields: [projetId], references: [id], onDelete: Cascade)
+  assigneId    String?     @map("assigne_id")
+  assigne      User?       @relation("AssignedTo", fields: [assigneId], references: [id], onDelete: SetNull)
+  commentaires Comment[]
+  fichiers     Fichier[]
+
+  @@map("tasks")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  contenu   String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  auteurId  String   @map("auteur_id")
+  auteur    User     @relation(fields: [auteurId], references: [id], onDelete: Cascade)
+  tacheId   String   @map("tache_id")
+  tache     Task     @relation(fields: [tacheId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+model Fichier {
+  id        String   @id @default(uuid())
+  nom       String
+  url       String
+  taille    Int
+  type      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  tacheId   String   @map("tache_id")
+  tache     Task     @relation(fields: [tacheId], references: [id], onDelete: Cascade)
+
+  @@map("fichiers")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  message   String
+  lu        Boolean  @default(false)
+  type      String
+  lienId    String?  @map("lien_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
 }
