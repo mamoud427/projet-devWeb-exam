@@ -1,0 +1,16 @@
+// @import "tailwindcss";
+
+// :root {
+//   --orbit-sidebar: #0F1117;
+//   --orbit-sidebar-text: #888780;
+//   --orbit-sidebar-active: #5DCAA5;
+//   --orbit-sidebar-active-bg: rgba(93, 202, 165, 0.08);
+//   --orbit-teal: #5DCAA5;
+//   --orbit-teal-dark: #0F6E56;
+//   --orbit-teal-light: #E1F5EE;
+//   --orbit-purple: #7F77DD;
+//   --orbit-purple-light: #EEEDFE;
+//   --orbit-amber: #EF9F27;
+//   --orbit-amber-light: #FAEEDA;
+//   --orbit-coral: #D85A30;
+// }
