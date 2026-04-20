@@ -12,6 +12,7 @@ import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { ProjectsPage } from './pages/ProjectsPage'
+import { ProjectDetailPage } from './pages/ProjectDetailPage'
 
 export default function App() {
   const dispatch = useAppDispatch()
@@ -49,7 +50,7 @@ export default function App() {
         >
           <Route path="/" element={<DashboardPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
-          <Route path="/projects/:id" element={<div className="p-8 text-gray-500">Détail projet — Jour 5</div>} />
+          <Route path="/projects/:id" element={<ProjectDetailPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

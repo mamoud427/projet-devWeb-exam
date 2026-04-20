@@ -10,6 +10,11 @@ export interface User {
   dateInscription: string
 }
 
+export interface ProjectMember {
+  id: string
+  user: Pick<User, 'id' | 'nom' | 'email' | 'avatar'>
+}
+
 export interface Project {
   id: string
   titre: string
@@ -18,6 +23,7 @@ export interface Project {
   updatedAt: string
   createurId: string
   createur: Pick<User, 'id' | 'nom' | 'avatar'>
+  membres?: ProjectMember[]
   _count?: { taches: number; membres: number }
 }
 
