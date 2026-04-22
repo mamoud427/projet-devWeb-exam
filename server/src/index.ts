@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }))
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: process.env.NODE_ENV === 'development' ? 10000 : 100,
   message: { error: 'Trop de requêtes, réessayez plus tard.' },
 })
 app.use('/api', limiter)

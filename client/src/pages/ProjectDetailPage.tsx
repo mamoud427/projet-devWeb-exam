@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Plus, Users } from 'lucide-react'
+import { ArrowLeft, Plus, Users, Search } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAppDispatch, useAppSelector } from '../hooks/redux'
 import { fetchProjectById } from '../store/slices/projectSlice'
@@ -11,14 +11,19 @@ import { KanbanBoard } from '../components/tasks/KanbanBoard'
 import { TaskFormModal } from '../components/tasks/TaskFormModal'
 import { Spinner } from '../components/ui/Spinner'
 import { Avatar } from '../components/ui/Avatar'
+import { TaskDetailModal } from '../components/tasks/TaskDetailModal'
 
 export const ProjectDetailPage = () => {
   const { id } = useParams<{ id: string }>()
   const dispatch = useAppDispatch()
   const project = useAppSelector((s: RootState) => s.projects.currentProject)
   const { tasks, loading } = useAppSelector((s: RootState) => s.tasks)
+
   const [showTaskForm, setShowTaskForm] = useState(false)
   const [editingTask, setEditingTask] = useState<Task | null>(null)
+  const [viewingTask, setViewingTask] = useState<Task | null>(null)
+  const [search, setSearch] = useState('')
+  const [filterAssigne, setFilterAssigne] = useState('')
 
   useEffect(() => {
     if (id) {
@@ -26,6 +31,12 @@ export const ProjectDetailPage = () => {
       dispatch(fetchTasks(id))
     }
   }, [dispatch, id])
+
+  const filteredTasks = tasks.filter(t => {
+    const matchSearch = t.titre.toLowerCase().includes(search.toLowerCase())
+    const matchAssigne = filterAssigne ? t.assigneId === filterAssigne : true
+    return matchSearch && matchAssigne
+  })
 
   const handleStatusChange = async (taskId: string, newStatus: TaskStatus) => {
     if (!id) return
@@ -81,6 +92,8 @@ export const ProjectDetailPage = () => {
     <div className="p-8 text-gray-500">Projet introuvable.</div>
   )
 
+  const membres = project.membres?.map(m => m.user) ?? []
+
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -125,6 +138,29 @@ export const ProjectDetailPage = () => {
           </div>
         </div>
 
+        {/* Filtres */}
+        <div className="flex items-center gap-3">
+          <div className="relative flex-1 max-w-xs">
+            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Rechercher une mission..."
+              className="w-full pl-8 pr-4 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#5DCAA5] transition-colors"
+            />
+          </div>
+          <select
+            value={filterAssigne}
+            onChange={e => setFilterAssigne(e.target.value)}
+            className="px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#5DCAA5] transition-colors"
+          >
+            <option value="">Tous les membres</option>
+            {membres.map(m => (
+              <option key={m.id} value={m.id}>{m.nom}</option>
+            ))}
+          </select>
+        </div>
+
         {/* Stats rapides */}
         <div className="flex items-center gap-4 mt-4">
           {[
@@ -148,11 +184,12 @@ export const ProjectDetailPage = () => {
           <div className="flex justify-center py-12"><Spinner /></div>
         ) : (
           <KanbanBoard
-            tasks={tasks}
+            tasks={filteredTasks}
             membres={project.membres?.map(m => m.user) ?? []}
             onStatusChange={handleStatusChange}
             onEditTask={(task) => setEditingTask(task)}
             onDeleteTask={handleDeleteTask}
+            onViewTask={(task) => setViewingTask(task)}
           />
         )}
       </div>
@@ -176,6 +213,15 @@ export const ProjectDetailPage = () => {
           defaultValues={editingTask}
           title="Modifier la mission"
           submitLabel="Mettre à jour"
+        />
+      )}
+
+      {viewingTask && (
+        <TaskDetailModal
+          task={viewingTask}
+          membres={membres}
+          onClose={() => setViewingTask(null)}
+          onEdit={() => { setEditingTask(viewingTask); setViewingTask(null) }}
         />
       )}
     </div>

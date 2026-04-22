@@ -11,8 +11,9 @@ import { ProtectedRoute } from './components/layout/ProtectedRoute'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { DashboardPage } from './pages/DashboardPage'
-import { ProjectsPage } from './pages/ProjectsPage'
+import { ProjectsPage } from './pages/ProjectPage'
 import { ProjectDetailPage } from './pages/ProjectDetailPage'
+import { ProfilePage } from './pages/ProfilPage'
 
 export default function App() {
   const dispatch = useAppDispatch()
@@ -51,6 +52,7 @@ export default function App() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/projects/:id" element={<ProjectDetailPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

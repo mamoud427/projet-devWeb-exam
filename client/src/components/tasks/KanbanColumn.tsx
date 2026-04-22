@@ -18,6 +18,7 @@ interface KanbanColumnProps {
   draggingId: string | null
   onEditTask: (task: Task) => void
   onDeleteTask: (taskId: string) => void
+  onViewTask?: (task: Task) => void
 }
 
 export const KanbanColumn = ({
@@ -28,6 +29,7 @@ export const KanbanColumn = ({
   isDraggingOver,
   onEditTask,
   onDeleteTask,
+  onViewTask
 }: KanbanColumnProps) => {
   return (
     <div className="flex flex-col h-full">
@@ -64,6 +66,7 @@ export const KanbanColumn = ({
                 isDragging={snapshot.isDragging}
                 onEdit={() => onEditTask(task)}
                 onDelete={() => onDeleteTask(task.id)}
+                onView={() => onViewTask?.(task)}
               />
             )}
           </Draggable>

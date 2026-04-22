@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
+import { DragDropContext, Droppable} from '@hello-pangea/dnd'
 import type { DropResult } from '@hello-pangea/dnd'
 import type { Task, TaskStatus, User } from '../../types'
 import { KanbanColumn } from './KanbanColumn'
@@ -10,6 +10,7 @@ interface KanbanBoardProps {
   onStatusChange: (taskId: string, status: TaskStatus) => void
   onEditTask: (task: Task) => void
   onDeleteTask: (taskId: string) => void
+  onViewTask?: (task: Task) => void
 }
 
 const columns: { id: TaskStatus; label: string; color: string }[] = [
@@ -24,6 +25,7 @@ export const KanbanBoard = ({
   onStatusChange,
   onEditTask,
   onDeleteTask,
+  onViewTask,
 }: KanbanBoardProps) => {
   const [draggingId, setDraggingId] = useState<string | null>(null)
 
@@ -56,6 +58,7 @@ export const KanbanBoard = ({
                 draggingId={draggingId}
                 onEditTask={onEditTask}
                 onDeleteTask={onDeleteTask}
+                onViewTask={onViewTask}
               />
             )}
           </Droppable>

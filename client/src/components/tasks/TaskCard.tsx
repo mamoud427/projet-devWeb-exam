@@ -10,6 +10,7 @@ interface TaskCardProps {
   isDragging: boolean
   onEdit: () => void
   onDelete: () => void
+  onView: () => void
 }
 
 const formatDate = (date: string) => {
@@ -25,6 +26,7 @@ export const TaskCard = ({
   isDragging,
   onEdit,
   onDelete,
+  onView,
 }: TaskCardProps) => {
   const assignee = membres.find(m => m.id === task.assigneId)
 
@@ -39,6 +41,7 @@ export const TaskCard = ({
         boxShadow: isDragging ? '0 8px 24px rgba(0,0,0,0.12)' : undefined,
         opacity: isDragging ? 0.9 : 1,
       }}
+      onClick={onView}
     >
       {/* Actions */}
       <div className="flex items-start justify-between gap-2 mb-2">
