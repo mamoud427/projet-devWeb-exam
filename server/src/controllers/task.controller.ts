@@ -4,6 +4,7 @@ import { TaskStatus } from '@prisma/client'
 import prisma from '../config/prisma'
 import { AppError } from '../middleware/error.middleware'
 import { AuthRequest } from '../types'
+import { emitToProject } from '../config/socket'
 
 export const getTasksByProject = async (
   req: AuthRequest,
@@ -60,6 +61,10 @@ export const createTask = async (
       },
     })
 
+
+  // Emettre l'evenement en temps reel a tous les membres du projet 
+  emitToProject(req.params.projectId as string, 'task:created', task)
+
     res.status(201).json({ success: true, data: task })
   } catch (err) {
     next(err)
@@ -97,6 +102,9 @@ export const updateTask = async (
       },
     })
 
+  // Emettre l'evenement en temps reel a tous les membres du projet 
+  emitToProject(req.params.projectId as string, 'task:updated', updated)
+
     res.json({ success: true, data: updated })
   } catch (err) {
     next(err)
@@ -115,6 +123,10 @@ export const deleteTask = async (
     if (!task) throw new AppError('Tâche introuvable.', 404)
 
     await prisma.task.delete({ where: { id: req.params.taskId as string } })
+
+
+  // Emettre l'evenement en temps reel
+    emitToProject(task.projetId, 'task:deleted', { id: req.params.taskId })
 
     res.json({ success: true, message: 'Tâche supprimée.' })
   } catch (err) {

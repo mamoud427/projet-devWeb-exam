@@ -14,3 +14,19 @@
   --orbit-amber-light: #FAEEDA;
   --orbit-coral: #D85A30;
 }
+
+/* Responsive mobile */
+@media (max-width: 768px) {
+  .sidebar-mobile-hidden {
+    display: none;
+  }
+
+  .kanban-mobile {
+    grid-template-columns: 1fr !important;
+    overflow-x: auto;
+  }
+
+  .dashboard-grid-mobile {
+    grid-template-columns: 1fr !important;
+  }
+}

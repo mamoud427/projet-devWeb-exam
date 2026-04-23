@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, Plus, Users, Search } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAppDispatch, useAppSelector } from '../hooks/redux'
+import { useSocket } from '../hooks/useSocket'
 import { fetchProjectById } from '../store/slices/projectSlice'
 import { fetchTasks, updateTask, createTask, deleteTask } from '../store/slices/taskSlice'
 import type { RootState } from '../store'
@@ -24,6 +25,8 @@ export const ProjectDetailPage = () => {
   const [viewingTask, setViewingTask] = useState<Task | null>(null)
   const [search, setSearch] = useState('')
   const [filterAssigne, setFilterAssigne] = useState('')
+
+  useSocket(id) // Connexion au socket pour ce projet
 
   useEffect(() => {
     if (id) {

@@ -38,7 +38,7 @@ export const StatChart = ({ todo, inProgress, done }: StatChartProps) => {
           ))}
         </Pie>
         <Tooltip
-          formatter={(value: number) => [`${value} tâche${value > 1 ? 's' : ''}`, '']}
+          formatter={(value) => [`${Number(value)} tâche${Number(value) > 1 ? 's' : ''}`, '']}
           contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #e5e7eb' }}
         />
         <Legend

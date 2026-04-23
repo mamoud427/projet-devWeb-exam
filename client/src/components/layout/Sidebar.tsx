@@ -6,8 +6,8 @@ import { logout } from '../../store/slices/authSlice'
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Vue d\'ensemble', end: true },
-  { to: '/projects', icon: Circle, label: 'Orbites' },
-  { to: '/profile', icon: Users, label: 'Profil' },
+  { to: '/projects', icon: Circle, label: 'Mes Orbites' },
+  { to: '/profile', icon: Users, label: 'Mon Profil' },
 ]
 
 export const Sidebar = () => {
@@ -23,7 +23,7 @@ export const Sidebar = () => {
 
   return (
     <aside
-      className="flex flex-col h-screen w-52 flex-shrink-0"
+      className="flex flex-col h-screen w-52 shrink-0"
       style={{ background: 'var(--orbit-sidebar)' }}
     >
       {/* Logo */}
@@ -75,7 +75,7 @@ export const Sidebar = () => {
               }
             >
               <span
-                className="w-2 h-2 rounded-full flex-shrink-0"
+                className="w-2 h-2 rounded-full shrink-0"
                 style={{ background: 'var(--orbit-teal)' }}
               />
               <span className="truncate">{p.titre}</span>
@@ -88,7 +88,7 @@ export const Sidebar = () => {
       <div className="mt-auto p-3 border-t border-white/5">
         <div className="flex items-center gap-2 px-2 mb-2">
           <div
-            className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0"
+            className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium shrink-0"
             style={{ background: 'rgba(93,202,165,0.15)', color: 'var(--orbit-teal)' }}
           >
             {user?.nom?.charAt(0).toUpperCase()}

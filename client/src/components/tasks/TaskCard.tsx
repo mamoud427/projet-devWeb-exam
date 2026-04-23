@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs */
 import type { DraggableProvided } from '@hello-pangea/dnd'
 import { Pencil, Trash2, MessageSquare, Calendar } from 'lucide-react'
 import type { Task, User } from '../../types'

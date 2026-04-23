@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs */
 import type { DroppableProvided } from '@hello-pangea/dnd'
 import { Draggable } from '@hello-pangea/dnd'
 import type { Task, User } from '../../types'
